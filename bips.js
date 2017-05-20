@@ -2,7 +2,7 @@ var events = {};
 (function(q) {
     var topics = {}, subUid = -1, timeout = 10000;
     
-    q.on = function(topic, func) {
+    q.subscribe = function(topic, func) {
         if (!topics[topic]) {
             topics[topic] = [];
         }
@@ -14,7 +14,7 @@ var events = {};
         return token;
     };
 
-    q.emit = function(topic, args, callback) {
+    q.publish = function(topic, args, publisherCallback) {
         if (!topics[topic]) {
             return false;
         }
@@ -23,23 +23,26 @@ var events = {};
                 len = subscribers ? subscribers.length : 0;
 
             while (len--) {
-	            if(callback){ 
+	            if(publisherCallback) { 
 		            
 		          //  Creates an unique topic name
-			      var UID = String(performance.now())+Math.random().toString(36).substr(2, 10);
+			      var UID = uniqueName();
 			      
 			      // Deletes the topic if no reply from the subscriber (timout can be set above)
 			      setTimeout(function(){delete topics[UID];},timeout);
 			      
-			      // Creates a listener to fire the silent emit
-			      bips.on(UID, function(){
-				      // new callback function wrapping the provided callback after removing the topic
+			      // a new, temporary subscription in order to handle a potential response:
+			      q.subscribe(UID, function(){
+				      // new callback function wrapping the provided callback plus the topic removal
 				      delete topics[UID];
-				      callback.apply(this,arguments)
+				      publisherCallback.apply(this,arguments)
 				  });
-			      var c = function(d){bips.emit(UID,d)}
-			      subscribers[len].func(args, c);            
-			    }else{
+				  // another callback function that the initial subscriber will be able to use to provide such a response
+			      var reply = function(d){q.publish(UID,d)}
+			      
+			      subscribers[len].func(args, reply);            
+			    }
+			    else {
                 	subscribers[len].func(args);
 	            }
             }
@@ -48,7 +51,7 @@ var events = {};
 
     };
 
-    q.off = function(token) {
+    q.unsubscribe = function(token) {
         for (var m in topics) {
             if (topics[m]) {
                 for (var i = 0, j = topics[m].length; i < j; i++) {
@@ -61,4 +64,11 @@ var events = {};
         }
         return false;
     };
+    
+    var uniqueName = function(){
+	    
+	    // You can replace this by any other method returning an unique identifier...
+	    return String(performance.now())+Math.random().toString(36).substr(2, 10);
+	    
+    }
 }(events));

@@ -10,46 +10,51 @@ You can find details here:
 http://medway.fr/blog/index.php/2017/05/12/adding-bidirectional-to-js-pubsub/
 
 ## Syntax
-Events functions are emit(), on() and off() instead of publish, subscribe and unsubscribe.
 
+The "events" object functions names are similar to those found in any standard pub/sub implementation.
 
-### emit(topic, data [,callback])
+### pubish(topic, data [,callback])
 
-Publishes  with an optional callback function as a third argument.
-If a callback function is provided, if will handle a potential response:
+Publishes with an optional callback function as a third argument.
+If such a callback exists, if will handle a potential response:
 ```
-events.emit("myTopic", data){
+events.publish("myTopic", data){
 	// some code handling response...
 });
 ```
 If not, the pub/sub pattern will work as usual...
 ```
-events.emit("myTopic", data);
+events.publish("myTopic", data);
 ```
 
-### on()
+### submit(topic, callback)
 
 The submitter can "reply" in case the publisher provided a callback function:
 
 ```
-var mySubmit = events.on("myTopic", function(data, reply){
+var mySubmit = events.submit("myTopic", function(data, reply){
   // Some code generating a response...
   reply(response);
  });
 ```
 If not, the pub/sub pattern will work as usual...
 ```
-events.on("myTopic", function(data){
+events.submit("myTopic", function(data){
     ...
 };
 ```
-### off()
+### unsubmit()
 
 Removes the callback:
 
 ```
-mySubmit.off();
+mySubmit.unsubmit();
+
 ```
+## Caveats
+
+If a callback function is provided when publishing, you should consider it only as a one-to-one communication,
+because in case of several subscribers, you may have to manage several responses...
 
 
 

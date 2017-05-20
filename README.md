@@ -3,7 +3,6 @@
   Description: Pub/sub is a very effective javascript pattern which can be improved adding bidirectionality.
   Author: Frédéric Rufin
   -->
-  
 # js-bidirectional-pubsub
 
 Pub/sub is a very effective javascript pattern in order to avoid direct interaction between code modules. However its one way mode may require additional hard-coded pub/sub if you expect some reply…

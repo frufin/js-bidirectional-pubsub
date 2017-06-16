@@ -18,12 +18,12 @@ http://medway.fr/blog/index.php/2017/05/12/adding-bidirectional-to-js-pubsub/
 
 The "events" object functions names are similar to those found in any standard pub/sub implementation.
 
-### pubish(topic, data [,callback])
+### publish(topic, data [,callback])
 
 Publishes with an optional callback function as a third argument.
 If such a callback exists, if will handle a potential response:
 ```
-events.publish("myTopic", data){
+events.publish("myTopic", data, function(response){
 	// some code handling response...
 });
 ```

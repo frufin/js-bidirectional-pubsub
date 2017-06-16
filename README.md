@@ -44,7 +44,7 @@ var mySubmit = events.submit("myTopic", function(data, reply){
 ```
 If not, the pub/sub pattern will work as usual...
 ```
-events.submit("myTopic", function(data){
+var mySubmit = events.submit("myTopic", function(data){
     ...
 };
 ```

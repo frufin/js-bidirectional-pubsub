@@ -12,7 +12,7 @@ I suggest improving javascript pub/sub pattern in order to provide bidirectional
 
 This implementation creates a temporary, silent reverse topic in order to avoid hard-coding a new pub/sub couple.
 You can find details here:
-http://medway.fr/blog/index.php/2017/05/12/adding-bidirectional-to-js-pubsub/
+https://www.medway.fr/bloog/javascript-bidirectional-pub-sub.php
 
 ## Syntax
 
